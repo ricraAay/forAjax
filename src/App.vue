@@ -4,7 +4,9 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-    ></v-navigation-drawer>
+    >
+      
+    </v-navigation-drawer>
 
     <v-app-bar app
       color="red lighten-1"
@@ -16,8 +18,8 @@
     </v-app-bar>
 
     <v-main>
-      <v-container>
-        <h2 class="pb-5 pt-3">Список менеджеров</h2>
+      <v-container class="pl-10  pr-10">
+        <h2 class="display-1 pb-10 pt-10">Список менеджеров</h2>
         <router-view/>
       </v-container>
     </v-main>
@@ -25,12 +27,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'App',
-  data: () => ({
-    drawer: true
-  }),
-});
+@Component
+export default class App extends Vue {
+  drawer: boolean = true 
+}
+
 </script>
