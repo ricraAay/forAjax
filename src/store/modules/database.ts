@@ -1,26 +1,36 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { db } from '@/main'
+
+//Models
+import IManager from '@/models/iManager'
 
 @Module
 export default class Database extends VuexModule {
-  count = 0
+  //State
+  managers: Array<Object> = []  
 
+  //Mutations
   @Mutation
-  increment(delta: number) {
-    this.count += delta
-  }
-  @Mutation
-  decrement(delta: number) {
-    this.count -= delta
+  updateStateManagers(payload: Array<Object>) {
+    this.managers = payload
   }
 
-  // action 'incr' commits mutation 'increment' when done with return value as payload
-  @Action({ commit: 'increment' })
-  incr() {
-    return 5
+  //Actions
+  @Action({ commit: 'updateStateManagers', rawError: true })
+  async getAllManagers(): Promise<Array<object>> {        
+    const querySnapshot = await db.collection('managers').get()
+    const result: Array<Object> = []
+
+    querySnapshot.forEach((doc: any) => {   
+      result.push(doc.data())
+    })
+
+    return result
   }
-  // action 'decr' commits mutation 'decrement' when done with return value as payload
-  @Action({ commit: 'decrement' })
-  decr() {
-    return 5
-  }
+  
+  @Action
+  addNewManager(payload: IManager): void {
+    db.collection('managers').add(payload)
+  }  
+
 }

@@ -2,7 +2,7 @@
   <div class="page-managers">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="managers"
       :items-per-page="5"
       @dblclick:row="routeTransition"
       class="elevation-1"
@@ -15,6 +15,7 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Managers extends Vue {
+  // data 
   headers: Array<object> = [
     { text: 'Фамилия', value: 'surname' },
     { text: 'Имя', value: 'name' },
@@ -22,19 +23,29 @@ export default class Managers extends Vue {
     { text: 'Дата регистрации', value: 'dateAndTime' }
   ]
 
-  desserts: Array<object> = [
-    {
-      id: Date.now(),
-      uuid: 'B13-2131231231-312W-QWE',
-      surname: 'Царьков',
-      name: 'Юрий',
-      department: 'Отдел продаж',
-      dateAndTime: '24.01.2021 14:00',
-    }
-  ]
+  //hooks 
+  created(): void {
+    this.$store.dispatch('getAllManagers')
+  }
 
-  routeTransition(event: object, manager: any): void {
-    this.$router.push(`/editing-manager/${manager.item.id}`)
+  //computed
+  get managers(): Array<Object> {
+    return this.$store.state.database.managers
+  }
+
+  //methods
+  async routeTransition(event: object, payload: any) {    
+    this.$router.push(`/editing/${payload.item.id}`)
+
+    /* this.$store.dispatch('addNewManager', {
+      id: Date.now(),
+      name: 'Давид',
+      surname: 'Файзулин',
+      guid: 'Aa34-WQEE-123ADQ-1231edW-12',
+      registration: new Date() 
+    })
+
+    this.$store.dispatch('getAllManagers') */
   }
 
 }

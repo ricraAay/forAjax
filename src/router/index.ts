@@ -12,7 +12,7 @@ const routes: Array<RouteConfig> = [
     component: Managers
   },
   {
-    path: '/editing-manager/:id',
+    path: '/editing/:id',
     name: 'EditingManager',
     component: EditingManagers
   }
