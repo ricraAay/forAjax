@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Managers from '../views/Managers.vue'
-import EditingManagers from '../views/EditingManagers.vue'
+
+import Managers from '@/views/Managers.vue'
+import EditingManagers from '@/views/EditingManagers.vue'
+import CreatedManager from '@/views/CreatedManager.vue'
 
 Vue.use(VueRouter)
 
@@ -12,9 +14,14 @@ const routes: Array<RouteConfig> = [
     component: Managers
   },
   {
-    path: '/editing/:id',
+    path: '/manager/:id',
     name: 'EditingManager',
     component: EditingManagers
+  },
+  {
+    path: '/registration',
+    name: 'CreatedManager',
+    component: CreatedManager
   }
 ]
 

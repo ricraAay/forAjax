@@ -5,7 +5,7 @@ import { db } from '@/main'
 import IManager from '@/models/iManager'
 
 @Module
-export default class Database extends VuexModule {
+export default class ManagerStoreModule extends VuexModule {
   //State
   managers: Array<Object> = []  
 
@@ -22,15 +22,33 @@ export default class Database extends VuexModule {
     const result: Array<Object> = []
 
     querySnapshot.forEach((doc: any) => {   
-      result.push(doc.data())
+      result.push(doc)
     })
 
     return result
   }
   
   @Action
+  async getCurrentManager(payload: string): Promise<any> {
+    const querySnapshot = await db.collection('managers').doc(payload).get()
+    return querySnapshot.data() 
+  }
+
+  @Action
   addNewManager(payload: IManager): void {
     db.collection('managers').add(payload)
   }  
+
+
+
+  get allManagers() {
+    return this.managers
+      .reduce((previousValue: Array<object>, currentValue: any) => {
+        const payload: any = currentValue.data()
+        payload.uid = currentValue.id
+        previousValue.push(payload)
+        return previousValue
+      }, []) 
+  }
 
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="page-managers">
+    <h2 class="display-1 pb-10 pt-10">Список менеджеров</h2>
     <v-data-table
       :headers="headers"
       :items="managers"
@@ -20,7 +21,7 @@ export default class Managers extends Vue {
     { text: 'Фамилия', value: 'surname' },
     { text: 'Имя', value: 'name' },
     { text: 'Подразделение', value: 'department' },
-    { text: 'Дата регистрации', value: 'dateAndTime' }
+    { text: 'Дата регистрации', value: 'datetime' }
   ]
 
   //hooks 
@@ -29,23 +30,13 @@ export default class Managers extends Vue {
   }
 
   //computed
-  get managers(): Array<Object> {
-    return this.$store.state.database.managers
+  get managers(): Array<object> {
+    return this.$store.getters.allManagers
   }
 
   //methods
   async routeTransition(event: object, payload: any) {    
-    this.$router.push(`/editing/${payload.item.id}`)
-
-    /* this.$store.dispatch('addNewManager', {
-      id: Date.now(),
-      name: 'Давид',
-      surname: 'Файзулин',
-      guid: 'Aa34-WQEE-123ADQ-1231edW-12',
-      registration: new Date() 
-    })
-
-    this.$store.dispatch('getAllManagers') */
+    this.$router.push(`/manager/${payload.item.uid}`)
   }
 
 }

@@ -1,9 +1,8 @@
-interface IManager {
+export default interface IManager {
   id: Number,
+  guid: String,
   name: String,
   surname: String,
-  guid: String,
-  registration: Date 
+  department: Number,
+  registration: String 
 }
-
-export default IManager
