@@ -22,8 +22,6 @@ export default class ManagerStoreModule extends VuexModule {
   
   @Mutation
   filtrationManagersList(payload: string) {
-    console.log(payload);
-    
     this.managers = this.managers
       .reduce((previousValue: Array<IManager>, currentValue: any) => {
         const value = currentValue.data()
@@ -38,7 +36,7 @@ export default class ManagerStoreModule extends VuexModule {
 
   //Actions
   @Action({ commit: 'updateStateManagers', rawError: true })
-  async loadingManagers(): Promise<Array<IManager>> {        
+  async loadingManagers(): Promise<Array<IManager>> {            
     const querySnapshot = await db.collection('managers').get()
     const result: Array<IManager> = []
 

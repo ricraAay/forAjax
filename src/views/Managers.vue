@@ -16,7 +16,6 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Managers extends Vue {
-  // data 
   headers: Array<object> = [
     { text: 'Фамилия', value: 'surname' },
     { text: 'Имя', value: 'name' },
@@ -24,21 +23,14 @@ export default class Managers extends Vue {
     { text: 'Дата регистрации', value: 'registration' }
   ]
 
-  //hooks 
   created(): void {
-    console.log(this.$route.query.find)
-    
-    !this.$route.query.find
-      ? this.$store.dispatch('loadingManagers')
-      : this.$store.commit('filtrationManagersList', this.$route.query.find)
+    this.$store.dispatch('loadingManagers')
   }
 
-  //computed
   get managers(): Array<object> {
     return this.$store.getters.allManagers
   }
 
-  //methods
   async routeTransition(event: object, payload: any) {    
     this.$router.push(`/manager/${payload.item.guid}`)
   }

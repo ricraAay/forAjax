@@ -57,6 +57,7 @@
           @click="drawer = !drawer"
         ></v-app-bar-nav-icon>
         <v-text-field
+          autocomplete="off"
           v-model.trim="payload"
           clearable
           dense
@@ -90,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Watch, Vue } from 'vue-property-decorator'
 
 @Component
 export default class App extends Vue {
@@ -104,19 +105,25 @@ export default class App extends Vue {
   ]
 
   created(): void {
-    if(!this.$store.getters.getDepartments.length) {
-      this.$store.dispatch('loadingDepartments')
+    this.$store.dispatch('loadingDepartments')
+  }
+
+  @Watch('payload')
+  reloadStateManagers(value: string): void {
+    if(!value) {
+      this.clearFilter()
     }
   }
 
   filtrationStore(): void {
     if (this.payload) {
-      this.$router.push({path: 'search', query: { find: this.payload }})
+      this.$store.commit('filtrationManagersList', this.payload)
+      this.$router.push({ path: '/', query: { find: this.payload }})
     } 
   }
 
   clearFilter(): void {
-    this.$router.push('/')
+    this.$store.dispatch('loadingManagers')
   }
 
 }
