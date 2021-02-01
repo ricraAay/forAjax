@@ -51,17 +51,38 @@
     <v-app-bar app
       color="red"
     >
-      <v-row>
+      <v-row class="align-center">
         <v-app-bar-nav-icon 
           color="white"
           @click="drawer = !drawer"
         ></v-app-bar-nav-icon>
+        <v-text-field
+          v-model.trim="payload"
+          clearable
+          dense
+          hide-details
+          hide-selected
+          item-text="name"
+          item-value="symbol"
+          label="Поиск..."
+          solo
+          elevation
+          @click:clear="clearFilter"
+        />
+        <v-btn
+          class="ml-4 mr-3"
+          elevation
+          color="white"
+          @click="filtrationStore"
+        >Найти</v-btn>
       </v-row>
     </v-app-bar>
 
     <v-main>
       <v-container class="pl-10  pr-10">
-        <router-view/>
+        <transition name="component-fade" mode="out-in">
+          <router-view />
+        </transition>
       </v-container>
     </v-main>
 
@@ -73,15 +94,40 @@ import { Component, Vue } from 'vue-property-decorator'
 
 @Component
 export default class App extends Vue {
-  drawer: boolean = true 
-
   selectedItem: number = 1
-  
+  drawer: boolean = true 
+  payload: string = ''
+
   items: Array<object> = [
     { text: 'Новый менеджер', icon: 'mdi-account', path: '/registration' },
     { text: 'Список менеджеров', icon: 'mdi-account-group', path: '/' }
   ]
 
-}
+  created(): void {
+    if(!this.$store.getters.getDepartments.length) {
+      this.$store.dispatch('loadingDepartments')
+    }
+  }
 
+  filtrationStore(): void {
+    if (this.payload) {
+      this.$router.push({path: 'search', query: { find: this.payload }})
+    } 
+  }
+
+  clearFilter(): void {
+    this.$router.push('/')
+  }
+
+}
 </script>
+
+<style>
+  .component-fade-enter-active, 
+  .component-fade-leave-active {
+    transition: opacity .3s ease;
+  }
+  .component-fade-enter, .component-fade-leave-to {
+    opacity: 0;
+  }
+</style>

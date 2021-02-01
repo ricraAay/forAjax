@@ -3,6 +3,6 @@ export default interface IManager {
   guid: String,
   name: String,
   surname: String,
-  department: Number,
+  department: String,
   registration: String 
 }

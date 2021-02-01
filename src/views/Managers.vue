@@ -21,12 +21,16 @@ export default class Managers extends Vue {
     { text: 'Фамилия', value: 'surname' },
     { text: 'Имя', value: 'name' },
     { text: 'Подразделение', value: 'department' },
-    { text: 'Дата регистрации', value: 'datetime' }
+    { text: 'Дата регистрации', value: 'registration' }
   ]
 
   //hooks 
   created(): void {
-    this.$store.dispatch('getAllManagers')
+    console.log(this.$route.query.find)
+    
+    !this.$route.query.find
+      ? this.$store.dispatch('loadingManagers')
+      : this.$store.commit('filtrationManagersList', this.$route.query.find)
   }
 
   //computed
@@ -36,7 +40,7 @@ export default class Managers extends Vue {
 
   //methods
   async routeTransition(event: object, payload: any) {    
-    this.$router.push(`/manager/${payload.item.uid}`)
+    this.$router.push(`/manager/${payload.item.guid}`)
   }
 
 }

@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Managers from '@/views/Managers.vue'
 import EditingManagers from '@/views/EditingManagers.vue'
 import CreatedManager from '@/views/CreatedManager.vue'
+import NotFound from '@/views/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,16 @@ const routes: Array<RouteConfig> = [
     path: '/registration',
     name: 'CreatedManager',
     component: CreatedManager
+  },
+  {
+    path: '/search',
+    name: 'SearchManager',
+    component: Managers
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 

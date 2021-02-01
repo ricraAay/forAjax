@@ -8,7 +8,7 @@
       @submit.prevent="submit"
     >
       <v-text-field
-        v-model="manager.name"
+        v-model.trim="manager.name"
         color="grey darken-1"
         class="pb-3"
         outlined
@@ -17,7 +17,7 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="manager.surname"
+        v-model.trim="manager.surname"
         color="grey darken-1"
         class="pb-3"
         outlined
@@ -26,7 +26,7 @@
       ></v-text-field>
 
       <v-autocomplete
-        v-model="manager.department"
+        v-model.trim="manager.department"
         :items="departments"
         color="grey darken-1"
         class="pb-3"
@@ -36,7 +36,8 @@
       ></v-autocomplete>
       
       <v-text-field
-        v-model="manager.registration"
+        v-model.trim="manager.registration"
+        type="datetime-local"
         color="grey darken-1"
         class="pb-3"
         outlined
@@ -45,6 +46,7 @@
       ></v-text-field>
       
       <v-btn 
+        :disabled="isDisabled"
         type="submit"
         large 
         elevation
@@ -60,29 +62,37 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
+// @ts-ignore 
+import { v4 as uuidv4 } from  'uuid'
+
+import IManager from '@/models/iManager'
+import IDepartment from '@/models/iDepartment'
+
 @Component
 export default class CreatedManager extends Vue {
-  manager = {
+  manager: IManager = {
+    id: Date.now(),
+    guid: uuidv4(),
     name: '',
     surname: '',
-    date: '',
+    registration: '',
     department: ''
   }
-  
-  created(): void {
-    this.$store.dispatch('getDepartments')
+
+  get isDisabled(): boolean {
+    return this.manager.name 
+      && this.manager.surname 
+      && this.manager.registration 
+      && this.manager.department ? false : true
   }
 
-  get departments(): Array<object> {
-    return this.$store.state.departments.departments
-      .map((n: any) => n.data().name)
+  get departments(): Array<IDepartment> {
+    return this.$store.getters.getDepartments
   }
   
   submit(): void {
-    this.$store.dispatch('addNewManager', {
-      ...this.manager,
-      id: Date.now()
-    })
+    this.$store.dispatch('addManager', this.manager)
+      .then(() => this.$router.push('/'))
   }
 }
 

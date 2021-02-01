@@ -17,7 +17,7 @@ export default class DepartmentStoreModule extends VuexModule {
 
   //Actions
   @Action({ commit: 'updateStateDepartments', rawError: true })
-  async getDepartments(): Promise<Array<IDepartment>> {        
+  async loadingDepartments(): Promise<Array<IDepartment>> {        
     const querySnapshot = await db.collection('departments').get()
     const result: Array<IDepartment> = []
 
@@ -26,6 +26,10 @@ export default class DepartmentStoreModule extends VuexModule {
     })
 
     return result
+  }
+
+  get getDepartments(): Array<IDepartment> {
+    return this.departments.map((department: any) => department.data().name)
   }
 
 }
